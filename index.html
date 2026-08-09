@@ -12,87 +12,159 @@
 <body>
 
 <header class="header">
-  <div class="logo">
-    <span>🚀</span>
+
+  <div class="brand">
+    <div class="brand-icon">🚀</div>
+
     <div>
       <h2>JobSathi AI</h2>
-      <p>Job Dhundo. Career Banao.</p>
+      <p>Job Dhundo • Career Banao</p>
     </div>
   </div>
 
-  <button class="profile-btn" onclick="openProfile()">👤</button>
+  <button
+    class="icon-btn"
+    onclick="openProfile()">
+    👤
+  </button>
+
 </header>
 
 
 <main>
 
-  <section class="welcome">
-    <h1>Apni next job dhoondo 🚀</h1>
-    <p>Jobs, Resume aur Career tools ek hi jagah.</p>
-  </section>
+  <section class="hero">
 
+    <span class="badge">
+      🇮🇳 India's Career Assistant
+    </span>
 
-  <section class="search-box">
-    <input
-      id="jobSearch"
-      type="text"
-      placeholder="Job, company ya location search karein..."
-      onkeyup="searchJobs()"
-    >
+    <h1>
+      Apni next job<br>
+      <span>smartly dhoondo.</span>
+    </h1>
 
-    <button onclick="searchJobs()">🔍</button>
-  </section>
-
-
-  <section class="categories">
-
-    <button onclick="filterJobs('Government')">
-      🏛️
-      <span>Government</span>
-    </button>
-
-    <button onclick="filterJobs('Private')">
-      🏢
-      <span>Private</span>
-    </button>
-
-    <button onclick="filterJobs('Airport')">
-      ✈️
-      <span>Airport</span>
-    </button>
-
-    <button onclick="filterJobs('Railway')">
-      🚆
-      <span>Railway</span>
-    </button>
+    <p>
+      Government, Railway, Airport aur Private jobs
+      ek hi jagah.
+    </p>
 
   </section>
 
+
+  <!-- SEARCH -->
+
+  <section class="search-area">
+
+    <div class="search-box">
+
+      <span>🔍</span>
+
+      <input
+        id="jobSearch"
+        type="text"
+        placeholder="Job, company, skill ya city..."
+        oninput="searchJobs()"
+      >
+
+      <button onclick="searchJobs()">
+        Search
+      </button>
+
+    </div>
+
+  </section>
+
+
+  <!-- CATEGORIES -->
+
+  <section>
+
+    <div class="section-heading">
+
+      <h2>Explore Jobs</h2>
+
+      <button onclick="showAllJobs()">
+        View All
+      </button>
+
+    </div>
+
+
+    <div class="categories">
+
+      <button onclick="filterJobs('Government')">
+        <strong>🏛️</strong>
+        <span>Government</span>
+      </button>
+
+      <button onclick="filterJobs('Railway')">
+        <strong>🚆</strong>
+        <span>Railway</span>
+      </button>
+
+      <button onclick="filterJobs('Airport')">
+        <strong>✈️</strong>
+        <span>Airport</span>
+      </button>
+
+      <button onclick="filterJobs('Private')">
+        <strong>🏢</strong>
+        <span>Private</span>
+      </button>
+
+    </div>
+
+  </section>
+
+
+  <!-- AI MATCHER -->
 
   <section class="ai-card">
 
-    <div>
-      <span class="ai-icon">🤖</span>
+    <div class="ai-top">
+
+      <div class="ai-logo">
+        🤖
+      </div>
 
       <div>
-        <h2>AI Job Matcher</h2>
+
+        <span class="ai-label">
+          AI CAREER ASSISTANT
+        </span>
+
+        <h2>
+          Find jobs made for you
+        </h2>
+
         <p>
-          Apni qualification ke according suitable jobs find karein.
+          Qualification aur category ke basis par
+          suitable jobs find karein.
         </p>
+
       </div>
+
     </div>
 
-    <button onclick="openMatcher()">Find Jobs</button>
+
+    <button onclick="openMatcher()">
+      Find My Jobs →
+    </button>
 
   </section>
 
 
-  <section class="jobs-section">
+  <!-- JOBS -->
 
-    <div class="section-title">
+  <section>
+
+    <div class="section-heading">
+
       <h2>🔥 Latest Jobs</h2>
 
-      <button onclick="showAllJobs()">View All</button>
+      <span id="jobCount"></span>
+
     </div>
 
     <div id="jobsContainer"></div>
@@ -100,22 +172,44 @@
   </section>
 
 
+  <!-- CAREER TOOLS -->
+
   <section class="tools-section">
 
-    <h2>🛠️ Career Tools</h2>
+    <div class="section-heading">
 
-    <div class="tools">
+      <h2>Career Tools</h2>
 
-      <button onclick="openResume()">
+    </div>
+
+
+    <div class="tools-grid">
+
+      <button
+        class="tool-card"
+        onclick="openResume()">
+
         <span>📄</span>
-        <b>Resume Builder</b>
-        <small>Create Resume</small>
+
+        <div>
+          <b>Resume Builder</b>
+          <small>Create a professional resume</small>
+        </div>
+
       </button>
 
-      <button onclick="openCoverLetter()">
+
+      <button
+        class="tool-card"
+        onclick="openCoverLetter()">
+
         <span>✉️</span>
-        <b>Cover Letter</b>
-        <small>Create Letter</small>
+
+        <div>
+          <b>Cover Letter</b>
+          <small>Create job-ready cover letter</small>
+        </div>
+
       </button>
 
     </div>
@@ -125,12 +219,19 @@
 </main>
 
 
-<!-- Modal -->
-<div id="modal" class="modal">
+<!-- MODAL -->
 
-  <div class="modal-content">
+<div
+  id="modal"
+  class="modal">
 
-    <button class="close-btn" onclick="closeModal()">✕</button>
+  <div class="modal-box">
+
+    <button
+      class="close-btn"
+      onclick="closeModal()">
+      ✕
+    </button>
 
     <div id="modalBody"></div>
 
@@ -139,31 +240,53 @@
 </div>
 
 
+<!-- BOTTOM NAV -->
+
 <nav class="bottom-nav">
 
-  <button onclick="goHome()" class="active">
-    🏠
-    <span>Home</span>
+  <button
+    class="nav-active"
+    onclick="goHome()">
+
+    <span>🏠</span>
+    Home
+
   </button>
 
-  <button onclick="showAllJobs()">
-    🔎
-    <span>Jobs</span>
+
+  <button
+    onclick="showAllJobs()">
+
+    <span>🔎</span>
+    Jobs
+
   </button>
 
-  <button onclick="openResume()">
-    📄
-    <span>Resume</span>
+
+  <button
+    onclick="openResume()">
+
+    <span>📄</span>
+    Resume
+
   </button>
 
-  <button onclick="openSaved()">
-    ❤️
-    <span>Saved</span>
+
+  <button
+    onclick="openSaved()">
+
+    <span>❤️</span>
+    Saved
+
   </button>
 
-  <button onclick="openProfile()">
-    👤
-    <span>Profile</span>
+
+  <button
+    onclick="openProfile()">
+
+    <span>👤</span>
+    Profile
+
   </button>
 
 </nav>
@@ -172,4 +295,12 @@
 <script src="app.js"></script>
 
 </body>
-                  </html>
+</html>
+
+Ab kya karna hai
+
+Commit changes dabao. ✅
+
+Uske baad "style.css" ko replace karenge.
+
+Bas "index.html" commit hone ke baad “HTML done” likho.
