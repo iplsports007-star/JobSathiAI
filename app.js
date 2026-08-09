@@ -1,6 +1,4 @@
-
 const jobs = [
-
   {
     id: 1,
     title: "SSC CGL",
@@ -9,47 +7,57 @@ const jobs = [
     location: "All India",
     salary: "As per notification",
     qualification: "Graduate",
+    lastDate: "Check official notification",
+    description: "Combined Graduate Level recruitment.",
     apply: "https://ssc.gov.in/"
   },
 
   {
     id: 2,
-    title: "Railway Recruitment",
-    company: "Indian Railways",
+    title: "RRB Recruitment",
+    company: "Railway Recruitment Boards",
     category: "Railway",
     location: "All India",
     salary: "As per notification",
     qualification: "12th / Graduate",
+    lastDate: "Check official notification",
+    description: "Railway recruitment opportunities.",
     apply: "https://www.rrbapply.gov.in/"
   },
 
   {
     id: 3,
-    title: "Airport Jobs",
+    title: "Airport Recruitment",
     company: "Airports Authority of India",
     category: "Airport",
     location: "India",
     salary: "As per notification",
     qualification: "12th / Graduate",
+    lastDate: "Check official notification",
+    description: "Airport and aviation career opportunities.",
     apply: "https://www.aai.aero/en/careers/recruitment"
   },
 
   {
     id: 4,
-    title: "Private Jobs",
+    title: "Private Graduate Jobs",
     company: "Private Companies",
     category: "Private",
     location: "Mumbai / India",
     salary: "As per company",
     qualification: "Graduate",
+    lastDate: "Check company website",
+    description: "Private-sector opportunities for graduates.",
     apply: "https://www.naukri.com/"
   }
-
 ];
 
 
 const jobsContainer =
   document.getElementById("jobsContainer");
+
+const jobCount =
+  document.getElementById("jobCount");
 
 const modal =
   document.getElementById("modal");
@@ -59,19 +67,25 @@ const modalBody =
 
 
 /* =========================
-   JOB DISPLAY
+   DISPLAY JOBS
 ========================= */
 
 function displayJobs(list) {
 
   jobsContainer.innerHTML = "";
 
-  if (list.length === 0) {
+  jobCount.textContent =
+    `${list.length} job${list.length !== 1 ? "s" : ""}`;
+
+
+  if (!list.length) {
 
     jobsContainer.innerHTML = `
       <div class="empty">
-        😔<br><br>
-        No matching jobs found.
+        🔎<br><br>
+        <b>No matching jobs found</b>
+        <br><br>
+        Try another keyword or category.
       </div>
     `;
 
@@ -79,23 +93,17 @@ function displayJobs(list) {
   }
 
 
-  list.forEach((job) => {
+  list.forEach(job => {
 
-    const savedJobs =
-      JSON.parse(
-        localStorage.getItem("savedJobs")
-      ) || [];
-
-    const isSaved =
-      savedJobs.some(
-        item => item.id === job.id
-      );
+    const saved =
+      isSaved(job.id);
 
 
     const card =
-      document.createElement("div");
+      document.createElement("article");
 
-    card.className = "job-card";
+    card.className =
+      "job-card";
 
 
     card.innerHTML = `
@@ -105,11 +113,11 @@ function displayJobs(list) {
         <div>
 
           <h3>
-            ${job.title}
+            ${escapeHTML(job.title)}
           </h3>
 
           <p class="job-company">
-            ${job.company}
+            ${escapeHTML(job.company)}
           </p>
 
         </div>
@@ -117,9 +125,10 @@ function displayJobs(list) {
 
         <button
           class="save-btn"
-          onclick="saveJob(${job.id})">
+          onclick="saveJob(${job.id})"
+          aria-label="Save job">
 
-          ${isSaved ? "💖" : "❤️"}
+          ${saved ? "💖" : "🤍"}
 
         </button>
 
@@ -128,30 +137,22 @@ function displayJobs(list) {
 
       <div class="job-info">
 
-        <span>
-          📍 ${job.location}
-        </span>
+        <span>📍 ${escapeHTML(job.location)}</span>
 
-        <span>
-          💰 ${job.salary}
-        </span>
+        <span>💰 ${escapeHTML(job.salary)}</span>
 
-        <span>
-          🎓 ${job.qualification}
-        </span>
+        <span>🎓 ${escapeHTML(job.qualification)}</span>
 
-        <span>
-          🏷️ ${job.category}
-        </span>
+        <span>🏷️ ${escapeHTML(job.category)}</span>
 
       </div>
 
 
       <button
         class="apply-btn"
-        onclick="applyJob(${job.id})">
+        onclick="openJobDetails(${job.id})">
 
-        Official Apply →
+        View Job & Apply →
 
       </button>
 
@@ -172,17 +173,15 @@ function displayJobs(list) {
 function searchJobs() {
 
   const input =
-    document.getElementById(
-      "jobSearch"
-    );
+    document.getElementById("jobSearch");
 
-  const search =
+  const query =
     input.value
       .toLowerCase()
       .trim();
 
 
-  if (!search) {
+  if (!query) {
 
     displayJobs(jobs);
 
@@ -191,37 +190,26 @@ function searchJobs() {
 
 
   const results =
-    jobs.filter(job =>
+    jobs.filter(job => {
 
-      job.title
-        .toLowerCase()
-        .includes(search)
+      const text = [
 
-      ||
+        job.title,
+        job.company,
+        job.category,
+        job.location,
+        job.salary,
+        job.qualification,
+        job.description
 
-      job.company
-        .toLowerCase()
-        .includes(search)
+      ]
+        .join(" ")
+        .toLowerCase();
 
-      ||
 
-      job.category
-        .toLowerCase()
-        .includes(search)
+      return text.includes(query);
 
-      ||
-
-      job.location
-        .toLowerCase()
-        .includes(search)
-
-      ||
-
-      job.qualification
-        .toLowerCase()
-        .includes(search)
-
-    );
+    });
 
 
   displayJobs(results);
@@ -229,7 +217,7 @@ function searchJobs() {
 
 
 /* =========================
-   CATEGORY
+   FILTER
 ========================= */
 
 function filterJobs(category) {
@@ -239,18 +227,118 @@ function filterJobs(category) {
       job => job.category === category
     );
 
+
   displayJobs(results);
 
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
 }
 
 
 /* =========================
-   ALL JOBS
+   SHOW ALL
 ========================= */
 
 function showAllJobs() {
 
   displayJobs(jobs);
+
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+}
+
+
+/* =========================
+   JOB DETAILS
+========================= */
+
+function openJobDetails(id) {
+
+  const job =
+    jobs.find(
+      item => item.id === id
+    );
+
+
+  if (!job) return;
+
+
+  const saved =
+    isSaved(job.id);
+
+
+  openModal(`
+
+    <h2 class="detail-title">
+      ${escapeHTML(job.title)}
+    </h2>
+
+    <p class="detail-company">
+      ${escapeHTML(job.company)}
+    </p>
+
+
+    <div class="detail-row">
+      📍 <b>Location:</b>
+      ${escapeHTML(job.location)}
+    </div>
+
+
+    <div class="detail-row">
+      💰 <b>Salary:</b>
+      ${escapeHTML(job.salary)}
+    </div>
+
+
+    <div class="detail-row">
+      🎓 <b>Qualification:</b>
+      ${escapeHTML(job.qualification)}
+    </div>
+
+
+    <div class="detail-row">
+      📅 <b>Last Date:</b>
+      ${escapeHTML(job.lastDate)}
+    </div>
+
+
+    <div class="detail-row">
+      🏷️ <b>Category:</b>
+      ${escapeHTML(job.category)}
+    </div>
+
+
+    <h3 class="detail-heading">
+      Job Description
+    </h3>
+
+    <p style="font-size:13px;line-height:1.6;color:#687386;">
+      ${escapeHTML(job.description)}
+    </p>
+
+
+    <button
+      class="primary-btn"
+      onclick="applyJob(${job.id})">
+
+      🔗 Official Apply
+
+    </button>
+
+
+    <button
+      class="primary-btn"
+      onclick="saveJob(${job.id})">
+
+      ${saved ? "💖 Remove Saved Job" : "❤️ Save Job"}
+
+    </button>
+
+  `);
 
 }
 
@@ -267,24 +355,52 @@ function applyJob(id) {
     );
 
 
-  if (!job) return;
+  if (!job || !job.apply) {
 
-
-  if (job.apply) {
-
-    window.open(
-      job.apply,
-      "_blank"
+    alert(
+      "Official application link available nahi hai."
     );
+
+    return;
+  }
+
+
+  window.open(
+    job.apply,
+    "_blank",
+    "noopener,noreferrer"
+  );
+}
+
+
+/* =========================
+   SAVED JOBS
+========================= */
+
+function getSavedJobs() {
+
+  try {
+
+    return JSON.parse(
+      localStorage.getItem("savedJobs")
+    ) || [];
+
+  } catch {
+
+    return [];
 
   }
 
 }
 
 
-/* =========================
-   SAVE JOB
-========================= */
+function isSaved(id) {
+
+  return getSavedJobs()
+    .some(job => job.id === id);
+
+}
+
 
 function saveJob(id) {
 
@@ -297,46 +413,38 @@ function saveJob(id) {
   if (!job) return;
 
 
-  let savedJobs =
-    JSON.parse(
-      localStorage.getItem("savedJobs")
-    ) || [];
+  let saved =
+    getSavedJobs();
 
 
   const exists =
-    savedJobs.some(
+    saved.some(
       item => item.id === id
     );
 
 
   if (exists) {
 
-    savedJobs =
-      savedJobs.filter(
+    saved =
+      saved.filter(
         item => item.id !== id
       );
 
-    localStorage.setItem(
-      "savedJobs",
-      JSON.stringify(savedJobs)
-    );
+    alert("Job Saved list se remove ho gayi.");
 
-    alert("Job removed from Saved Jobs.");
+  } else {
 
-  }
+    saved.push(job);
 
-  else {
-
-    savedJobs.push(job);
-
-    localStorage.setItem(
-      "savedJobs",
-      JSON.stringify(savedJobs)
-    );
-
-    alert("Job saved ❤️");
+    alert("Job Saved ❤️");
 
   }
+
+
+  localStorage.setItem(
+    "savedJobs",
+    JSON.stringify(saved)
+  );
 
 
   displayJobs(jobs);
@@ -344,32 +452,47 @@ function saveJob(id) {
 
 
 /* =========================
-   SAVED JOBS
+   SAVED PAGE
 ========================= */
 
 function openSaved() {
 
-  const savedJobs =
-    JSON.parse(
-      localStorage.getItem("savedJobs")
-    ) || [];
+  const saved =
+    getSavedJobs();
 
 
-  if (savedJobs.length === 0) {
+  if (!saved.length) {
 
     jobsContainer.innerHTML = `
+
       <div class="empty">
+
         ❤️<br><br>
-        Abhi koi saved job nahi hai.
+
+        <b>No saved jobs yet.</b>
+
+        <br><br>
+
+        Job ke ❤️ button par tap karke
+        save karein.
+
       </div>
+
     `;
+
+    jobCount.textContent = "";
 
     return;
   }
 
 
-  displayJobs(savedJobs);
+  displayJobs(saved);
 
+
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
 }
 
 
@@ -385,16 +508,37 @@ function openMatcher() {
       🤖 AI Job Matcher
     </h2>
 
+    <p style="color:#687386;font-size:12px;margin-bottom:16px;">
+      Apni qualification aur preferred category
+      select karein.
+    </p>
+
+
     <div class="form-group">
 
       <label>
         Qualification
       </label>
 
-      <input
-        id="matcherQualification"
-        placeholder="Example: Graduate"
-      >
+      <select id="matcherQualification">
+
+        <option value="">
+          Any Qualification
+        </option>
+
+        <option value="10th">
+          10th
+        </option>
+
+        <option value="12th">
+          12th
+        </option>
+
+        <option value="graduate">
+          Graduate
+        </option>
+
+      </select>
 
     </div>
 
@@ -405,9 +549,7 @@ function openMatcher() {
         Preferred Category
       </label>
 
-      <select
-        id="matcherCategory"
-        style="width:100%;padding:12px;border:1px solid #dce1eb;border-radius:9px;">
+      <select id="matcherCategory">
 
         <option value="">
           Any Category
@@ -417,16 +559,16 @@ function openMatcher() {
           Government
         </option>
 
-        <option value="Private">
-          Private
+        <option value="Railway">
+          Railway
         </option>
 
         <option value="Airport">
           Airport
         </option>
 
-        <option value="Railway">
-          Railway
+        <option value="Private">
+          Private
         </option>
 
       </select>
@@ -438,12 +580,11 @@ function openMatcher() {
       class="primary-btn"
       onclick="runMatcher()">
 
-      Find Matching Jobs
+      Find Matching Jobs →
 
     </button>
 
   `);
-
 }
 
 
@@ -455,8 +596,7 @@ function runMatcher() {
         "matcherQualification"
       )
       .value
-      .toLowerCase()
-      .trim();
+      .toLowerCase();
 
 
   const category =
@@ -470,22 +610,19 @@ function runMatcher() {
   const results =
     jobs.filter(job => {
 
-      const qualificationMatch =
+      const qMatch =
         !qualification ||
         job.qualification
           .toLowerCase()
           .includes(qualification);
 
 
-      const categoryMatch =
+      const cMatch =
         !category ||
         job.category === category;
 
 
-      return (
-        qualificationMatch &&
-        categoryMatch
-      );
+      return qMatch && cMatch;
 
     });
 
@@ -503,79 +640,110 @@ function runMatcher() {
 
 function openResume() {
 
+  const oldData =
+    getResumeData();
+
+
   openModal(`
 
     <h2 class="form-title">
-      📄 Resume Builder
+      📄 Professional Resume Builder
     </h2>
 
 
     <div class="form-group">
-      <label>Full Name *</label>
+
+      <label>
+        Full Name *
+      </label>
 
       <input
         id="resumeName"
-        placeholder="Your full name">
+        value="${escapeAttribute(oldData.name || "")}"
+        placeholder="Full Name">
+
     </div>
 
 
     <div class="form-group">
-      <label>Mobile Number</label>
+
+      <label>
+        Mobile Number
+      </label>
 
       <input
         id="resumePhone"
-        placeholder="9876543210"
-        type="tel">
+        value="${escapeAttribute(oldData.phone || "")}"
+        type="tel"
+        placeholder="9876543210">
+
     </div>
 
 
     <div class="form-group">
-      <label>Email</label>
+
+      <label>
+        Email
+      </label>
 
       <input
         id="resumeEmail"
-        placeholder="you@email.com"
-        type="email">
+        value="${escapeAttribute(oldData.email || "")}"
+        type="email"
+        placeholder="you@email.com">
+
     </div>
 
 
     <div class="form-group">
-      <label>Career Objective</label>
+
+      <label>
+        Career Objective
+      </label>
 
       <textarea
         id="resumeObjective"
-        placeholder="Your career objective">
-      </textarea>
+        placeholder="Your career objective">${escapeHTML(oldData.objective || "")}</textarea>
+
     </div>
 
 
     <div class="form-group">
-      <label>Education</label>
+
+      <label>
+        Education
+      </label>
 
       <textarea
         id="resumeEducation"
-        placeholder="Example: Bachelor Degree - 2026">
-      </textarea>
+        placeholder="Example: Bachelor Degree - 2026">${escapeHTML(oldData.education || "")}</textarea>
+
     </div>
 
 
     <div class="form-group">
-      <label>Skills</label>
+
+      <label>
+        Skills
+      </label>
 
       <textarea
         id="resumeSkills"
-        placeholder="Communication, MS Office, Excel...">
-      </textarea>
+        placeholder="Communication, MS Office, Excel...">${escapeHTML(oldData.skills || "")}</textarea>
+
     </div>
 
 
     <div class="form-group">
-      <label>Experience</label>
+
+      <label>
+        Experience
+      </label>
 
       <textarea
         id="resumeExperience"
-        placeholder="Fresher / Experience details">
-      </textarea>
+        placeholder="Fresher / Experience details">${escapeHTML(oldData.experience || "")}</textarea>
+
     </div>
 
 
@@ -583,12 +751,31 @@ function openResume() {
       class="primary-btn"
       onclick="generateResume()">
 
-      Create Resume
+      Create Professional Resume →
 
     </button>
 
   `);
+}
 
+
+/* =========================
+   RESUME DATA
+========================= */
+
+function getResumeData() {
+
+  try {
+
+    return JSON.parse(
+      localStorage.getItem("resumeData")
+    ) || {};
+
+  } catch {
+
+    return {};
+
+  }
 }
 
 
@@ -598,82 +785,70 @@ function openResume() {
 
 function generateResume() {
 
-  const name =
-    document
-      .getElementById("resumeName")
-      .value
-      .trim();
+  const data = {
+
+    name:
+      document
+        .getElementById("resumeName")
+        .value
+        .trim(),
+
+    phone:
+      document
+        .getElementById("resumePhone")
+        .value
+        .trim(),
+
+    email:
+      document
+        .getElementById("resumeEmail")
+        .value
+        .trim(),
+
+    objective:
+      document
+        .getElementById("resumeObjective")
+        .value
+        .trim(),
+
+    education:
+      document
+        .getElementById("resumeEducation")
+        .value
+        .trim(),
+
+    skills:
+      document
+        .getElementById("resumeSkills")
+        .value
+        .trim(),
+
+    experience:
+      document
+        .getElementById("resumeExperience")
+        .value
+        .trim()
+
+  };
 
 
-  if (!name) {
+  if (!data.name) {
 
     alert(
-      "Please enter your full name."
+      "Please enter your Full Name."
     );
 
     return;
   }
 
 
-  const phone =
-    document
-      .getElementById("resumePhone")
-      .value;
-
-
-  const email =
-    document
-      .getElementById("resumeEmail")
-      .value;
-
-
-  const objective =
-    document
-      .getElementById("resumeObjective")
-      .value;
-
-
-  const education =
-    document
-      .getElementById("resumeEducation")
-      .value;
-
-
-  const skills =
-    document
-      .getElementById("resumeSkills")
-      .value;
-
-
-  const experience =
-    document
-      .getElementById("resumeExperience")
-      .value;
-
-
-  const resumeData = {
-
-    name,
-    phone,
-    email,
-    objective,
-    education,
-    skills,
-    experience
-
-  };
-
-
   localStorage.setItem(
     "resumeData",
-    JSON.stringify(resumeData)
+    JSON.stringify(data)
   );
 
 
-  showResumePreview(
-    resumeData
-  );
-
+  showResumePreview(data);
 }
 
 
@@ -703,7 +878,11 @@ function showResumePreview(data) {
 
         ${escapeHTML(data.phone || "")}
 
-        ${data.phone && data.email ? " | " : ""}
+        ${
+          data.phone && data.email
+            ? " | "
+            : ""
+        }
 
         ${escapeHTML(data.email || "")}
 
@@ -717,7 +896,7 @@ function showResumePreview(data) {
       <p>
         ${escapeHTML(
           data.objective ||
-          "Motivated candidate looking for an opportunity to learn, contribute and grow professionally."
+          "Motivated candidate seeking an opportunity to learn, contribute and grow professionally."
         )}
       </p>
 
@@ -762,9 +941,18 @@ function showResumePreview(data) {
 
     <button
       class="primary-btn"
-      onclick="downloadResume()">
+      onclick="printResume()">
 
-      ⬇️ Download Resume
+      🖨️ Print / Save as PDF
+
+    </button>
+
+
+    <button
+      class="primary-btn"
+      onclick="downloadResumeText()">
+
+      ⬇️ Download Text Backup
 
     </button>
 
@@ -778,40 +966,28 @@ function showResumePreview(data) {
     </button>
 
   `;
-
 }
 
 
-function escapeHTML(value) {
+/* =========================
+   PRINT / PDF
+========================= */
 
-  return String(value)
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
+function printResume() {
+
+  window.print();
 
 }
 
 
 /* =========================
-   DOWNLOAD RESUME
+   TEXT BACKUP
 ========================= */
 
-function downloadResume() {
+function downloadResumeText() {
 
   const data =
-    JSON.parse(
-      localStorage.getItem("resumeData")
-    );
-
-
-  if (!data) {
-
-    alert("Resume data not found.");
-
-    return;
-  }
+    getResumeData();
 
 
   const text = `
@@ -819,36 +995,28 @@ function downloadResume() {
 JOB SATHI AI
 PROFESSIONAL RESUME
 
-Name:
-${data.name}
+NAME
+${data.name || ""}
 
-Mobile:
+MOBILE
 ${data.phone || ""}
 
-Email:
+EMAIL
 ${data.email || ""}
 
-
 CAREER OBJECTIVE
-
 ${data.objective || ""}
 
-
 EDUCATION
-
 ${data.education || ""}
 
-
 SKILLS
-
 ${data.skills || ""}
 
-
 EXPERIENCE
-
 ${data.experience || "Fresher"}
 
-  `;
+`;
 
 
   downloadFile(
@@ -856,7 +1024,6 @@ ${data.experience || "Fresher"}
     "JobSathiAI_Resume.txt",
     "text/plain"
   );
-
 }
 
 
@@ -867,18 +1034,14 @@ ${data.experience || "Fresher"}
 async function shareResume() {
 
   const data =
-    JSON.parse(
-      localStorage.getItem("resumeData")
-    );
-
-
-  if (!data) return;
+    getResumeData();
 
 
   const text = `
+
 JobSathi AI Resume
 
-Name: ${data.name}
+Name: ${data.name || ""}
 Mobile: ${data.phone || ""}
 Email: ${data.email || ""}
 
@@ -887,6 +1050,7 @@ ${data.education || ""}
 
 Skills:
 ${data.skills || ""}
+
 `;
 
 
@@ -903,24 +1067,21 @@ ${data.skills || ""}
 
       });
 
-    }
-
-    catch (error) {
+    } catch (error) {
 
       console.log(error);
 
     }
 
-  }
+  } else {
 
-  else {
-
-    alert(
-      "Sharing is not supported on this browser."
+    downloadFile(
+      text,
+      "JobSathiAI_Resume.txt",
+      "text/plain"
     );
 
   }
-
 }
 
 
@@ -933,13 +1094,15 @@ function openCoverLetter() {
   openModal(`
 
     <h2 class="form-title">
-      ✉️ AI Cover Letter
+      ✉️ Cover Letter Builder
     </h2>
 
 
     <div class="form-group">
 
-      <label>Your Name *</label>
+      <label>
+        Your Name *
+      </label>
 
       <input
         id="letterName"
@@ -950,7 +1113,9 @@ function openCoverLetter() {
 
     <div class="form-group">
 
-      <label>Job Position *</label>
+      <label>
+        Job Position *
+      </label>
 
       <input
         id="letterJob"
@@ -961,7 +1126,9 @@ function openCoverLetter() {
 
     <div class="form-group">
 
-      <label>Company</label>
+      <label>
+        Company
+      </label>
 
       <input
         id="letterCompany"
@@ -972,7 +1139,9 @@ function openCoverLetter() {
 
     <div class="form-group">
 
-      <label>Your Qualification</label>
+      <label>
+        Qualification
+      </label>
 
       <input
         id="letterQualification"
@@ -985,14 +1154,17 @@ function openCoverLetter() {
       class="primary-btn"
       onclick="generateCoverLetter()">
 
-      Generate Cover Letter
+      Generate Cover Letter →
 
     </button>
 
   `);
-
 }
 
+
+/* =========================
+   GENERATE LETTER
+========================= */
 
 function generateCoverLetter() {
 
@@ -1002,13 +1174,11 @@ function generateCoverLetter() {
       .value
       .trim();
 
-
-  const job =
+  const position =
     document
       .getElementById("letterJob")
       .value
       .trim();
-
 
   const company =
     document
@@ -1016,17 +1186,14 @@ function generateCoverLetter() {
       .value
       .trim();
 
-
   const qualification =
     document
-      .getElementById(
-        "letterQualification"
-      )
+      .getElementById("letterQualification")
       .value
       .trim();
 
 
-  if (!name || !job) {
+  if (!name || !position) {
 
     alert(
       "Name aur Job Position required hai."
@@ -1040,13 +1207,11 @@ function generateCoverLetter() {
 
 Dear Hiring Manager,
 
-I am ${name}, and I am writing to express my interest in the ${job} position${company ? " at " + company : ""}.
+I am ${name}, and I am writing to express my interest in the ${position}${company ? " position at " + company : ""}.
 
-I have completed my ${qualification || "education"} and I am eager to contribute my skills and dedication to your organization.
+I have completed my ${qualification || "education"} and I am eager to contribute my skills, dedication and willingness to learn to your organization.
 
-I am hardworking, responsible, willing to learn and able to work effectively as part of a team.
-
-I would appreciate the opportunity to discuss my application further.
+I am hardworking, responsible and comfortable working as part of a team. I would appreciate the opportunity to discuss my application further.
 
 Thank you for your time and consideration.
 
@@ -1054,7 +1219,7 @@ Sincerely,
 
 ${name}
 
-  `;
+`;
 
 
   modalBody.innerHTML = `
@@ -1075,18 +1240,22 @@ ${name}
 
     <button
       class="primary-btn"
-      onclick="downloadFile(
-        ${JSON.stringify(letter)},
-        'Cover_Letter.txt',
-        'text/plain'
-      )">
+      onclick='downloadFile(${JSON.stringify(letter)}, "Cover_Letter.txt", "text/plain")'>
 
-      ⬇️ Download Letter
+      ⬇️ Download Cover Letter
+
+    </button>
+
+
+    <button
+      class="primary-btn"
+      onclick='shareText(${JSON.stringify(letter)}, "Cover Letter")'>
+
+      📤 Share
 
     </button>
 
   `;
-
 }
 
 
@@ -1096,13 +1265,11 @@ ${name}
 
 function openProfile() {
 
-  const resume =
-    JSON.parse(
-      localStorage.getItem("resumeData")
-    );
+  const data =
+    getResumeData();
 
 
-  if (!resume) {
+  if (!data.name) {
 
     openModal(`
 
@@ -1116,10 +1283,11 @@ function openProfile() {
           JobSathi Profile
         </h2>
 
-        <p style="margin:10px 0;color:#687386;">
-          Resume create karke apna profile
-          automatically save karein.
+        <p>
+          Resume create karke apni profile
+          information save karein.
         </p>
+
 
         <button
           class="primary-btn"
@@ -1145,16 +1313,19 @@ function openProfile() {
         👤
       </div>
 
+
       <h2>
-        ${escapeHTML(resume.name)}
+        ${escapeHTML(data.name)}
       </h2>
 
-      <p style="margin:8px 0;color:#687386;">
-        ${escapeHTML(resume.email || "")}
+
+      <p>
+        ${escapeHTML(data.email || "Email not added")}
       </p>
 
-      <p style="color:#687386;">
-        ${escapeHTML(resume.phone || "")}
+
+      <p>
+        ${escapeHTML(data.phone || "Mobile not added")}
       </p>
 
 
@@ -1162,14 +1333,13 @@ function openProfile() {
         class="primary-btn"
         onclick="openResume()">
 
-        Edit Resume
+        ✏️ Edit Resume
 
       </button>
 
     </div>
 
   `);
-
 }
 
 
@@ -1182,13 +1352,9 @@ function goHome() {
   displayJobs(jobs);
 
   window.scrollTo({
-
     top: 0,
-
     behavior: "smooth"
-
   });
-
 }
 
 
@@ -1206,7 +1372,6 @@ function openModal(content) {
 
   document.body.style.overflow =
     "hidden";
-
 }
 
 
@@ -1217,11 +1382,11 @@ function closeModal() {
 
   document.body.style.overflow =
     "auto";
-
 }
 
 
-window.onclick =
+window.addEventListener(
+  "click",
   function(event) {
 
     if (
@@ -1232,11 +1397,12 @@ window.onclick =
 
     }
 
-  };
+  }
+);
 
 
 /* =========================
-   DOWNLOAD FILE
+   DOWNLOAD
 ========================= */
 
 function downloadFile(
@@ -1273,14 +1439,73 @@ function downloadFile(
 
   link.click();
 
-
   link.remove();
 
 
-  URL.revokeObjectURL(
-    url
+  setTimeout(
+    () => URL.revokeObjectURL(url),
+    1000
   );
+}
 
+
+/* =========================
+   SHARE TEXT
+========================= */
+
+async function shareText(
+  text,
+  title
+) {
+
+  if (
+    navigator.share
+  ) {
+
+    try {
+
+      await navigator.share({
+        title: title,
+        text: text
+      });
+
+    } catch (error) {
+
+      console.log(error);
+
+    }
+
+  } else {
+
+    downloadFile(
+      text,
+      "JobSathiAI_Document.txt",
+      "text/plain"
+    );
+
+  }
+}
+
+
+/* =========================
+   SECURITY HELPERS
+========================= */
+
+function escapeHTML(value) {
+
+  return String(value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+
+function escapeAttribute(value) {
+
+  return escapeHTML(value)
+    .replace(/\n/g, " ");
 }
 
 
