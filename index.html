@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>JobSathi AI</title>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="logo">
+      <span>🚀</span>
+      <div>
+        <h2>JobSathi AI</h2>
+        <p>Job Dhundo. Career Banao.</p>
+      </div>
+    </div>
+
+    <button class="profile-btn">👤</button>
+  </header>
+
+
+  <!-- Main -->
+  <main>
+
+    <!-- Welcome -->
+    <section class="welcome">
+      <h1>Apni next job dhoondo 🚀</h1>
+      <p>Jobs, Resume aur Career tools ek hi jagah.</p>
+    </section>
+
+
+    <!-- Search -->
+    <section class="search-box">
+      <input
+        type="text"
+        id="jobSearch"
+        placeholder="Job, company ya location search karein..."
+      >
+
+      <button onclick="searchJobs()">🔍 Search</button>
+    </section>
+
+
+    <!-- Quick Categories -->
+    <section class="categories">
+
+      <button onclick="filterJobs('Government')">
+        🏛️
+        <span>Government</span>
+      </button>
+
+      <button onclick="filterJobs('Private')">
+        🏢
+        <span>Private</span>
+      </button>
+
+      <button onclick="filterJobs('Airport')">
+        ✈️
+        <span>Airport</span>
+      </button>
+
+      <button onclick="filterJobs('Railway')">
+        🚆
+        <span>Railway</span>
+      </button>
+
+    </section>
+
+
+    <!-- AI Job Matcher -->
+    <section class="ai-card">
+
+      <div>
+        <span class="ai-icon">🤖</span>
+
+        <div>
+          <h2>AI Job Matcher</h2>
+          <p>
+            Apni qualification ke according suitable jobs find karein.
+          </p>
+        </div>
+      </div>
+
+      <button onclick="openMatcher()">
+        Find Jobs
+      </button>
+
+    </section>
+
+
+    <!-- Jobs -->
+    <section class="jobs-section">
+
+      <div class="section-title">
+        <h2>🔥 Latest Jobs</h2>
+
+        <button onclick="showAllJobs()">
+          View All
+        </button>
+      </div>
+
+      <div id="jobsContainer"></div>
+
+    </section>
+
+
+    <!-- Career Tools -->
+    <section class="tools-section">
+
+      <h2>🛠️ Career Tools</h2>
+
+      <div class="tools">
+
+        <button onclick="openResume()">
+          <span>📄</span>
+          <b>Resume Builder</b>
+          <small>Professional Resume</small>
+        </button>
+
+        <button onclick="openCoverLetter()">
+          <span>✉️</span>
+          <b>Cover Letter</b>
+          <small>Generate Letter</small>
+        </button>
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <!-- Bottom Navigation -->
+  <nav class="bottom-nav">
+
+    <button class="active" onclick="goHome()">
+      🏠
+      <span>Home</span>
+    </button>
+
+    <button onclick="showAllJobs()">
+      🔎
+      <span>Jobs</span>
+    </button>
+
+    <button onclick="openResume()">
+      📄
+      <span>Resume</span>
+    </button>
+
+    <button onclick="openSaved()">
+      ❤️
+      <span>Saved</span>
+    </button>
+
+    <button onclick="openProfile()">
+      👤
+      <span>Profile</span>
+    </button>
+
+  </nav>
+
+
+  <script src="app.js"></script>
+
+</body>
+  </html>
