@@ -1,6 +1,18 @@
+ const firebaseConfig = {
+  apiKey: "AIzaSyDId8t1O9NDGuqTCCp-2UvUsnO74FdMO_s",
+  authDomain: "jobsathiai.firebaseapp.com",
+  databaseURL: "https://jobsathiai-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "jobsathiai",
+  storageBucket: "jobsathiai.firebasestorage.app",
+  messagingSenderId: "859237560626",
+  appId: "1:859237560626:web:d1ac16c2a184e85689a72b"
+};
+  const firebaseApp = firebase.initializeApp(firebaseConfig);
+const database = firebase.database();
+const auth = firebase.auth();
+
 const jobs = [
-  {
-    id: 1,
+  {   id: 1,
     title: "SSC CGL",
     company: "Staff Selection Commission",
     category: "Government",
