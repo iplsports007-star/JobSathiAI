@@ -1,301 +1,75 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <title>JobSathi AI</title>
-
-  <link rel="stylesheet" href="style.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0f172a">
+<title>JobSathi AI</title>
+<style>
+:root{--p:#2563eb;--dark:#0f172a;--muted:#64748b;--bg:#f6f8fc;--card:#fff;--line:#e2e8f0}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--dark);font-family:system-ui,-apple-system,Segoe UI,Arial,sans-serif;padding-bottom:82px}
+button,input,textarea,select{font:inherit}button{cursor:pointer}.header{position:sticky;top:0;z-index:10;background:#fff;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;padding:13px 16px}.brand{display:flex;gap:10px;align-items:center}.brand-icon{font-size:28px}.brand h2{margin:0;font-size:20px}.brand p{margin:2px 0 0;color:var(--muted);font-size:11px}.icon-btn{border:1px solid var(--line);background:#fff;border-radius:11px;width:42px;height:42px;font-size:20px}
+main{max-width:900px;margin:auto;padding:18px 16px}.badge{display:inline-block;background:#dbeafe;color:#1d4ed8;border-radius:999px;padding:7px 11px;font-size:12px;font-weight:700}.hero h1{font-size:clamp(40px,10vw,62px);line-height:1.02;margin:18px 0 12px;letter-spacing:-1.5px}.hero h1 span{color:var(--p)}.hero p{color:var(--muted);font-size:16px;line-height:1.5}
+.search-box{display:flex;gap:7px;background:#fff;border:1px solid var(--line);border-radius:15px;padding:7px;margin:22px 0}.search-box span{display:grid;place-items:center;width:35px}.search-box input{flex:1;min-width:0;border:0;outline:0}.search-box button,.primary{border:0;background:var(--p);color:#fff;border-radius:10px;padding:10px 14px;font-weight:700}
+.section-heading{display:flex;justify-content:space-between;align-items:center;margin:22px 0 12px}.section-heading h2{margin:0;font-size:22px}.section-heading button{border:0;background:transparent;color:var(--p);font-weight:700}.categories{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}.categories button,.tool-card{border:1px solid var(--line);background:#fff;border-radius:15px;padding:13px 8px}.categories button{display:flex;flex-direction:column;align-items:center;gap:6px}.categories strong{font-size:24px}.categories span{font-size:12px;font-weight:700}
+.ai-card{margin:25px 0;background:linear-gradient(135deg,#0f172a,#1e3a8a);color:#fff;border-radius:20px;padding:19px}.ai-top{display:flex;gap:12px}.ai-logo{font-size:26px;background:#ffffff1f;border-radius:13px;width:48px;height:48px;display:grid;place-items:center;flex:none}.ai-label{font-size:10px;letter-spacing:1px;opacity:.8;font-weight:800}.ai-card h2{margin:5px 0}.ai-card p{margin:0;color:#dbeafe;font-size:13px}.ai-card>button{margin-top:17px;border:0;border-radius:10px;padding:10px 14px;font-weight:800}
+.jobs{display:grid;gap:11px}.job-card{background:#fff;border:1px solid var(--line);border-radius:17px;padding:15px}.job-title{margin:0;font-size:17px}.company{color:var(--muted);font-size:13px;margin:5px 0}.job-meta{display:flex;flex-wrap:wrap;gap:6px;margin:9px 0}.chip{background:#f1f5f9;border-radius:99px;padding:4px 8px;font-size:11px}.salary{color:#15803d;font-weight:800;font-size:13px}.job-actions{display:flex;gap:8px;margin-top:12px}.job-actions button{flex:1;border:1px solid var(--line);background:#fff;border-radius:10px;padding:9px;font-weight:700}.job-actions .apply{background:var(--p);color:#fff;border-color:var(--p)}.saved{color:#dc2626!important;background:#fff1f2!important}
+.tools-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.tool-card{display:flex;gap:11px;text-align:left;align-items:center}.tool-card>span{font-size:25px}.tool-card b,.tool-card small{display:block}.tool-card small{color:var(--muted);margin-top:3px}
+.bottom-nav{position:fixed;z-index:20;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(5,1fr);padding:7px 4px calc(7px + env(safe-area-inset-bottom))}.bottom-nav button{border:0;background:none;color:#64748b;font-size:10px;font-weight:700;display:flex;flex-direction:column;align-items:center;gap:2px}.bottom-nav span{font-size:19px}.bottom-nav .active{color:var(--p)}
+.modal{display:none;position:fixed;inset:0;z-index:50;background:#02061799;padding:16px;overflow:auto}.modal.show{display:flex;align-items:flex-start;justify-content:center}.modal-box{position:relative;background:#fff;width:min(680px,100%);border-radius:20px;padding:20px;margin:20px auto}.close{position:absolute;right:10px;top:10px;border:0;background:#f1f5f9;border-radius:9px;width:35px;height:35px}.form-title{margin:0 40px 18px 0}.form-group{margin-bottom:13px}.form-group label{display:block;font-weight:700;font-size:13px;margin-bottom:5px}.form-group input,.form-group textarea,.form-group select{width:100%;border:1px solid var(--line);border-radius:10px;padding:10px;outline:0}.form-group textarea{min-height:85px}.actions{display:flex;gap:8px;margin-top:16px}.actions>*{flex:1;border:1px solid var(--line);border-radius:10px;padding:10px;font-weight:700;background:#fff}.actions .primary{background:var(--p);color:#fff}.preview{border:1px solid #cbd5e1;padding:22px;border-radius:10px}.preview h1{margin:0 0 4px}.preview h3{border-bottom:2px solid #111;padding-bottom:4px;margin-top:18px}.preview p{white-space:pre-line;line-height:1.5}.empty{text-align:center;background:#fff;border:1px dashed #cbd5e1;border-radius:15px;padding:30px;color:var(--muted)}.toast{position:fixed;z-index:100;bottom:95px;left:50%;transform:translate(-50%,20px);background:#0f172a;color:#fff;border-radius:10px;padding:10px 14px;font-size:13px;opacity:0;transition:.2s}.toast.show{opacity:1;transform:translate(-50%,0)}
+@media(max-width:600px){.categories{grid-template-columns:repeat(2,1fr)}.tools-grid{grid-template-columns:1fr}}
+</style>
 </head>
-
 <body>
-
-<header class="header">
-
-  <div class="brand">
-    <div class="brand-icon">🚀</div>
-
-    <div>
-      <h2>JobSathi AI</h2>
-      <p>Job Dhundo • Career Banao</p>
-    </div>
-  </div>
-
-  <button
-    class="icon-btn"
-    onclick="openProfile()">
-    👤
-  </button>
-
-</header>
-
-
+<header class="header"><div class="brand"><div class="brand-icon">ðŸš€</div><div><h2>JobSathi AI</h2><p>Job Dhundo â€¢ Career Banao</p></div></div><button class="icon-btn" onclick="openProfile()">ðŸ‘¤</button></header>
 <main>
-
-  <section class="hero">
-
-    <span class="badge">
-      🇮🇳 India's Career Assistant
-    </span>
-
-    <h1>
-      Apni next job<br>
-      <span>smartly dhoondo.</span>
-    </h1>
-
-    <p>
-      Government, Railway, Airport aur Private jobs
-      ek hi jagah.
-    </p>
-
-  </section>
-
-
-  <!-- SEARCH -->
-
-  <section class="search-area">
-
-    <div class="search-box">
-
-      <span>🔍</span>
-
-      <input
-        id="jobSearch"
-        type="text"
-        placeholder="Job, company, skill ya city..."
-        oninput="searchJobs()"
-      >
-
-      <button onclick="searchJobs()">
-        Search
-      </button>
-
-    </div>
-
-  </section>
-
-
-  <!-- CATEGORIES -->
-
-  <section>
-
-    <div class="section-heading">
-
-      <h2>Explore Jobs</h2>
-
-      <button onclick="showAllJobs()">
-        View All
-      </button>
-
-    </div>
-
-
-    <div class="categories">
-
-      <button onclick="filterJobs('Government')">
-        <strong>🏛️</strong>
-        <span>Government</span>
-      </button>
-
-      <button onclick="filterJobs('Railway')">
-        <strong>🚆</strong>
-        <span>Railway</span>
-      </button>
-
-      <button onclick="filterJobs('Airport')">
-        <strong>✈️</strong>
-        <span>Airport</span>
-      </button>
-
-      <button onclick="filterJobs('Private')">
-        <strong>🏢</strong>
-        <span>Private</span>
-      </button>
-
-    </div>
-
-  </section>
-
-
-  <!-- AI MATCHER -->
-
-  <section class="ai-card">
-
-    <div class="ai-top">
-
-      <div class="ai-logo">
-        🤖
-      </div>
-
-      <div>
-
-        <span class="ai-label">
-          AI CAREER ASSISTANT
-        </span>
-
-        <h2>
-          Find jobs made for you
-        </h2>
-
-        <p>
-          Qualification aur category ke basis par
-          suitable jobs find karein.
-        </p>
-
-      </div>
-
-    </div>
-
-
-    <button onclick="openMatcher()">
-      Find My Jobs →
-    </button>
-
-  </section>
-
-
-  <!-- JOBS -->
-
-  <section>
-
-    <div class="section-heading">
-
-      <h2>🔥 Latest Jobs</h2>
-
-      <span id="jobCount"></span>
-
-    </div>
-
-    <div id="jobsContainer"></div>
-
-  </section>
-
-
-  <!-- CAREER TOOLS -->
-
-  <section class="tools-section">
-
-    <div class="section-heading">
-
-      <h2>Career Tools</h2>
-
-    </div>
-
-
-    <div class="tools-grid">
-
-      <button
-        class="tool-card"
-        onclick="openResume()">
-
-        <span>📄</span>
-
-        <div>
-          <b>Resume Builder</b>
-          <small>Create a professional resume</small>
-        </div>
-
-      </button>
-
-
-      <button
-        class="tool-card"
-        onclick="openCoverLetter()">
-
-        <span>✉️</span>
-
-        <div>
-          <b>Cover Letter</b>
-          <small>Create job-ready cover letter</small>
-        </div>
-
-      </button>
-
-    </div>
-
-  </section>
-
+<section class="hero"><span class="badge">ðŸ‡®ðŸ‡³ India's Career Assistant</span><h1>Apni next job<br><span>smartly dhoondo.</span></h1><p>Government, Railway, Airport aur Private jobs ek hi jagah.</p></section>
+<div class="search-box"><span>ðŸ”</span><input id="search" placeholder="Job, company, skill ya city..." oninput="searchJobs()"><button onclick="searchJobs()">Search</button></div>
+<section><div class="section-heading"><h2>Explore Jobs</h2><button onclick="allJobs()">View All</button></div><div class="categories">
+<button onclick="filter('Government')"><strong>ðŸ›ï¸</strong><span>Government</span></button><button onclick="filter('Railway')"><strong>ðŸš†</strong><span>Railway</span></button><button onclick="filter('Airport')"><strong>âœˆï¸</strong><span>Airport</span></button><button onclick="filter('Private')"><strong>ðŸ¢</strong><span>Private</span></button>
+</div></section>
+<section class="ai-card"><div class="ai-top"><div class="ai-logo">ðŸ¤–</div><div><span class="ai-label">AI CAREER ASSISTANT</span><h2>Find jobs made for you</h2><p>Qualification aur category ke basis par suitable jobs find karein.</p></div></div><button onclick="matcher()">Find My Jobs â†’</button></section>
+<section id="jobs"><div class="section-heading"><h2>ðŸ”¥ Latest Jobs</h2><span id="count"></span></div><div id="list" class="jobs"></div></section>
+<section><div class="section-heading"><h2>Career Tools</h2></div><div class="tools-grid"><button class="tool-card" onclick="resume()"><span>ðŸ“„</span><div><b>Resume Builder</b><small>Create a professional resume</small></div></button><button class="tool-card" onclick="cover()"><span>âœ‰ï¸</span><div><b>Cover Letter</b><small>Create job-ready cover letter</small></div></button></div></section>
 </main>
+<nav class="bottom-nav"><button class="active" onclick="home()"><span>ðŸ </span>Home</button><button onclick="allJobs()"><span>ðŸ”Ž</span>Jobs</button><button onclick="resume()"><span>ðŸ“„</span>Resume</button><button onclick="savedJobs()"><span>â¤ï¸</span>Saved</button><button onclick="openProfile()"><span>ðŸ‘¤</span>Profile</button></nav>
+<div id="modal" class="modal" onclick="if(event.target===this)closeModal()"><div class="modal-box"><button class="close" onclick="closeModal()">âœ•</button><div id="modalBody"></div></div></div><div id="toast" class="toast"></div>
 
-
-<!-- MODAL -->
-
-<div
-  id="modal"
-  class="modal">
-
-  <div class="modal-box">
-
-    <button
-      class="close-btn"
-      onclick="closeModal()">
-      ✕
-    </button>
-
-    <div id="modalBody"></div>
-
-  </div>
-
-</div>
-
-
-<!-- BOTTOM NAV -->
-
-<nav class="bottom-nav">
-
-  <button
-    class="nav-active"
-    onclick="goHome()">
-
-    <span>🏠</span>
-    Home
-
-  </button>
-
-
-  <button
-    onclick="showAllJobs()">
-
-    <span>🔎</span>
-    Jobs
-
-  </button>
-
-
-  <button
-    onclick="openResume()">
-
-    <span>📄</span>
-    Resume
-
-  </button>
-
-
-  <button
-    onclick="openSaved()">
-
-    <span>❤️</span>
-    Saved
-
-  </button>
-
-
-  <button
-    onclick="openProfile()">
-
-    <span>👤</span>
-    Profile
-
-  </button>
-
-</nav>
-
-
-<script src="app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+<script>
+const jobs=[
+{id:1,title:"Airport Ground Staff",company:"Airport Services",location:"Mumbai",category:"Airport",salary:"â‚¹18,000â€“â‚¹28,000",qualification:"Graduate",skills:"Communication, Customer Service",url:"https://www.aiasl.in/"},
+{id:2,title:"Trainee Screener",company:"Airport Security",location:"Mumbai",category:"Airport",salary:"â‚¹18,000â€“â‚¹30,000",qualification:"Graduate",skills:"Security, Communication",url:"https://www.aai.aero/"},
+{id:3,title:"SSC CGL Graduate Jobs",company:"Staff Selection Commission",location:"India",category:"Government",salary:"â‚¹30,000â€“â‚¹60,000",qualification:"Graduate",skills:"GK, Aptitude, Reasoning",url:"https://ssc.gov.in/"},
+{id:4,title:"Government Clerk / Assistant",company:"Government Department",location:"India",category:"Government",salary:"â‚¹25,000â€“â‚¹35,000",qualification:"12th / Graduate",skills:"Computer, MS Office",url:"https://ssc.gov.in/"},
+{id:5,title:"Railway NTPC",company:"Indian Railways",location:"India",category:"Railway",salary:"â‚¹25,000â€“â‚¹40,000",qualification:"12th / Graduate",skills:"Computer, Reasoning",url:"https://www.rrbapply.gov.in/"},
+{id:6,title:"Railway Group D",company:"Indian Railways",location:"India",category:"Railway",salary:"â‚¹22,000â€“â‚¹30,000",qualification:"10th",skills:"Science, Reasoning",url:"https://www.rrbapply.gov.in/"},
+{id:7,title:"Customer Support Executive",company:"Private Company",location:"Mumbai",category:"Private",salary:"â‚¹18,000â€“â‚¹32,000",qualification:"Graduate",skills:"Communication, Computer",url:"https://www.naukri.com/"},
+{id:8,title:"Data Entry Executive",company:"Private Company",location:"Mumbai",category:"Private",salary:"â‚¹15,000â€“â‚¹25,000",qualification:"12th / Graduate",skills:"Typing, MS Office",url:"https://www.naukri.com/"}
+];
+let shown=[...jobs],saved=JSON.parse(localStorage.getItem("jsSaved")||"[]");
+const esc=x=>String(x??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+function render(a=shown){count.textContent=a.length+" jobs";list.innerHTML=a.length?a.map(j=>`<article class="job-card"><h3 class="job-title">${esc(j.title)}</h3><div class="company">${esc(j.company)} â€¢ ${esc(j.location)}</div><div class="job-meta"><span class="chip">${esc(j.category)}</span><span class="chip">${esc(j.qualification)}</span></div><div class="salary">${esc(j.salary)}</div><div class="company">Skills: ${esc(j.skills)}</div><div class="job-actions"><button class="apply" onclick="apply(${j.id})">Apply Now â†’</button><button class="${saved.includes(j.id)?"saved":""}" onclick="save(${j.id})">${saved.includes(j.id)?"â¤ï¸ Saved":"â™¡ Save"}</button></div></article>`).join(""):'<div class="empty">ðŸ˜• No jobs found.</div>'}
+function searchJobs(){let q=search.value.toLowerCase().trim();shown=jobs.filter(j=>(j.title+" "+j.company+" "+j.location+" "+j.category+" "+j.qualification+" "+j.skills).toLowerCase().includes(q));render()}
+function filter(c){shown=jobs.filter(j=>j.category===c);search.value="";render();document.getElementById("jobs").scrollIntoView({behavior:"smooth"})}
+function allJobs(){shown=[...jobs];search.value="";render();document.getElementById("jobs").scrollIntoView({behavior:"smooth"})}
+function apply(id){let j=jobs.find(x=>x.id===id);window.open(j.url,"_blank");toast("Official application page opened")}
+function save(id){saved=saved.includes(id)?saved.filter(x=>x!==id):[...saved,id];localStorage.setItem("jsSaved",JSON.stringify(saved));render();toast("Saved jobs updated")}
+function savedJobs(){shown=jobs.filter(j=>saved.includes(j.id));render();document.getElementById("jobs").scrollIntoView({behavior:"smooth"})}
+function home(){scrollTo({top:0,behavior:"smooth"})}
+function toast(s){let t=document.getElementById("toast");t.textContent=s;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),1800)}
+function openModal(s){modalBody.innerHTML=s;modal.classList.add("show");document.body.style.overflow="hidden"}function closeModal(){modal.classList.remove("show");document.body.style.overflow=""}
+function matcher(){openModal(`<h2 class="form-title">ðŸ¤– AI Job Matcher</h2><div class="form-group"><label>Qualification</label><select id="mq"><option value="">Any</option><option>10th</option><option>12th</option><option>Graduate</option></select></div><div class="form-group"><label>Category</label><select id="mc"><option value="">Any</option><option>Government</option><option>Railway</option><option>Airport</option><option>Private</option></select></div><div class="form-group"><label>City</label><input id="mcity" placeholder="Mumbai"></div><div class="actions"><button class="primary" onclick="matchRun()">Find Jobs</button></div>`)}
+function matchRun(){let q=mq.value.toLowerCase(),c=mc.value,city=mcity.value.toLowerCase().trim();shown=jobs.filter(j=>(!c||j.category===c)&&(!city||j.location.toLowerCase().includes(city)||j.location==="India")&&(!q||j.qualification.toLowerCase().includes(q)));closeModal();render();document.getElementById("jobs").scrollIntoView({behavior:"smooth"});toast(shown.length+" suitable jobs found")}
+function getR(){try{return JSON.parse(localStorage.getItem("jsResume")||"{}")}catch(e){return{}}}
+function resume(){let d=getR();openModal(`<h2 class="form-title">ðŸ“„ Professional Resume Builder</h2>${field("rname","Full Name *",d.name,"Full Name")}${field("rphone","Mobile Number",d.phone,"9876543210","tel")}${field("remail","Email",d.email,"you@email.com","email")}${area("robj","Career Objective",d.objective,"Your career objective")}${area("redu","Education",d.education,"Example: Bachelor Degree, University, Year")}${area("rskill","Skills",d.skills,"Communication, MS Office, Teamwork")}${area("rexp","Experience",d.experience,"Fresher / Experience") }<div class="actions"><button class="primary" onclick="makeResume()">Create Professional Resume â†’</button></div>`)}
+function field(id,l,v,p,t="text"){return `<div class="form-group"><label>${l}</label><input id="${id}" type="${t}" value="${esc(v||"")}" placeholder="${p}"></div>`}
+function area(id,l,v,p){return `<div class="form-group"><label>${l}</label><textarea id="${id}" placeholder="${p}">${esc(v||"")}</textarea></div>`}
+function makeResume(){let d={name:rname.value.trim(),phone:rphone.value.trim(),email:remail.value.trim(),objective:robj.value.trim(),education:redu.value.trim(),skills:rskill.value.trim(),experience:rexp.value.trim()};if(!d.name){alert("Please enter your Full Name.");return}localStorage.setItem("jsResume",JSON.stringify(d));openModal(`<h2 class="form-title">ðŸ‘€ Resume Preview</h2><div id="rp" class="preview"><h1>${esc(d.name)}</h1><div class="company">${esc(d.phone)}${d.phone&&d.email?" | ":""}${esc(d.email)}</div><h3>CAREER OBJECTIVE</h3><p>${esc(d.objective||"Motivated candidate seeking an opportunity to learn and contribute.")}</p><h3>EDUCATION</h3><p>${esc(d.education)}</p><h3>SKILLS</h3><p>${esc(d.skills)}</p><h3>EXPERIENCE</h3><p>${esc(d.experience||"Fresher")}</p></div><div class="actions"><button class="primary" onclick="printBox('rp')">ðŸ–¨ï¸ Print / Save PDF</button><button onclick="resume()">Edit</button></div>`)}
+function printBox(id){let w=open("","_blank");w.document.write("<html><head><title>JobSathi Resume</title><style>body{font-family:Arial;padding:35px;line-height:1.5}h3{border-bottom:2px solid #111;padding-bottom:4px;margin-top:20px}</style></head><body>"+document.getElementById(id).outerHTML+"</body></html>");w.document.close();w.print()}
+function cover(){let d=getR();openModal(`<h2 class="form-title">âœ‰ï¸ Cover Letter Builder</h2>${field("cn","Your Name",d.name,"Your Name")}${field("cj","Job Title","","Airport Ground Staff")}${field("cc","Company","","Company Name")}<div class="actions"><button class="primary" onclick="makeCover()">Generate Cover Letter</button></div>`)}
+function makeCover(){let n=cn.value||"Applicant",j=cj.value||"the advertised position",c=cc.value||"your organization";let text=`Dear Hiring Manager,\n\nI am writing to apply for the ${j} position at ${c}. I am a motivated candidate with strong communication skills, willingness to learn and a commitment to performing my responsibilities sincerely.\n\nI would welcome the opportunity to discuss my application and demonstrate my suitability for the role.\n\nThank you for your time and consideration.\n\nSincerely,\n${n}`;openModal(`<h2 class="form-title">âœ‰ï¸ Cover Letter</h2><div id="cp" class="preview"><p>${esc(text)}</p></div><div class="actions"><button class="primary" onclick="printBox('cp')">ðŸ–¨ï¸ Print / Save PDF</button></div>`)}
+function openProfile(){openModal(`<h2 class="form-title">ðŸ‘¤ My Profile</h2><div class="form-group"><label>Name</label><input id="pn" placeholder="Your Name"></div><div class="form-group"><label>Preferred City</label><input id="pc" placeholder="Mumbai"></div><div class="actions"><button class="primary" onclick="localStorage.setItem('jsProfile',JSON.stringify({name:pn.value,city:pc.value}));closeModal();toast('Profile saved')">Save Profile</button></div>`)}
+render();
+</script>
 </body>
 </html>
-
